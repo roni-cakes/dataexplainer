@@ -1,17 +1,3 @@
-"""Tests for BaseDescriber. Run from the project folder with: python -m pytest"""
-
-import pandas as pd
-import pytest
-
-from dataexplainer.base import BaseDescriber
-
-
-class DemoDescriber(BaseDescriber):
-    """A tiny child class used only for testing."""
-
-    def describe(self, df):
-        self._check_column(df)
-        return ["demo sentence"]
 
 
 class OtherDescriber(DemoDescriber):
