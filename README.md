@@ -1,5 +1,4 @@
 # dataexplainer
-
 A Python library that turns a table of data into a short summary in plain English.
 
 Tables and charts are hard to read for people who do not code. dataexplainer looks at a column and writes simple sentences about it, so programmers can explain their data and everyone else can understand it.
