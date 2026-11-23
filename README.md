@@ -101,12 +101,12 @@ python -m pytest
 
 ## Contributors
 
-| Member | Classes | Tests |
+| Member | Classes and files | Tests |
 |---|---|---|
-| Marc Ahron Alfar (A) | `BaseDescriber`, `NumberDescriber` | `test_base.py`, `test_number.py` |
-| [Unknown] (B) | `CategoryDescriber`, `MissingDescriber` | `test_category.py`, `test_missing.py` |
-| [Unknown] (C) | `Story`, `DataStory` | `test_story.py` |
-| [Unknown] (D) | `utils`, packaging, documentation, demo, PyPI | `test_utils.py` |
+| Marc Ahron Alfar (A) | `BaseDescriber`, `NumberDescriber`, packaging (`setup.py`), README, PyPI upload | `test_base.py`, `test_number.py` |
+| Mark Jay Macaya (B) | `CategoryDescriber`, `MissingDescriber` | `test_category.py`, `test_missing.py` |
+| Maria Taboclaon (C) | `Story`, `DataStory` | `test_story.py` |
+| Mc Lloyd Murillo (D) | `utils.py`, `__init__.py`, `demo.py` | `test_utils.py` |
 
 ## License
 
