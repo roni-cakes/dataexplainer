@@ -3,7 +3,7 @@
 import pandas as pd
 import pytest
 
-from dataexplainer.base import BaseDescriber
+from pandalogue.base import BaseDescriber
 
 
 class DemoDescriber(BaseDescriber):
