@@ -1,9 +1,9 @@
-"""Tests for BaseDescriber. Run from the project folder with: python -m pytest"""
+"""Tests for BaseDescriber."""
 
 import pandas as pd
 import pytest
 
-from dataexplainer.base import BaseDescriber
+from pandalogue.base import BaseDescriber
 
 
 class DemoDescriber(BaseDescriber):
