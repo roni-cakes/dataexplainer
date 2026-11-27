@@ -193,12 +193,12 @@ python -m pytest --doctest-modules pandalogue
 
 ## Contributors
 
-| Member | Letter | Owns | Tests |
-|---|---|---|---|
-| Marc Ahron C. Alfar (leader) | A | `base.py`, `rule.py`, `contracts.py`, `requirements.txt`, `README.md`, `docs/`, `setup.py`, `demo.py`, PyPI upload | `test_base.py`, `test_rule.py` |
-| Mark Jay Macaya | B | `category.py`, `missing.py`, `date.py` | `test_category.py`, `test_missing.py`, `test_date.py` |
-| Maria Taboclaon | C | `story.py`, `number.py` | `test_story.py`, `test_number.py` |
-| Mc Lloyd Murillo | D | `utils.py`, `relationship.py`, `__init__.py` | `test_utils.py`, `test_relationship.py`, `test_init.py` |
+| Member | Owns | Tests |
+| --- | --- | --- |
+| Marc Ahron C. Alfar (leader) | `base.py`, `rule.py`, `contracts.py`, `requirements.txt`, `README.md`, `docs/`, `setup.py`, `demo.py`, PyPI upload | `test_base.py`, `test_rule.py` |
+| Mark Jay Macaya | `category.py`, `missing.py`, `date.py` | `test_category.py`, `test_missing.py`, `test_date.py` |
+| Maria Taboclaon | `story.py`, `number.py` | `test_story.py`, `test_number.py` |
+| Mc Lloyd Murillo | `utils.py`, `relationship.py`, `__init__.py` | `test_utils.py`, `test_relationship.py`, `test_init.py` |
 
 ## License
 
