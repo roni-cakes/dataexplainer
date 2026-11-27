@@ -7,7 +7,7 @@ Tables and charts are hard to read for people who do not code. pandalogue looks 
 
 ## What it does
 
-| Feature |
+| Features |
 | --- |
 | Number columns: average, middle value (median), lowest, highest (`NumberDescriber`) |
 | Small numbers shown properly (`0.0002`, not `0`) and infinite values left out with a note |
