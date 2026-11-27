@@ -13,7 +13,7 @@ setup(
     description="Turn a table of data into a short summary in plain English.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="[Your name]",
+    author="Marc Ahron C. Alfar, Mark Jay Macaya, Maria Taboclaon, Mc Lloyd Murillo",
     url="https://github.com/roni-cakes/pandalogue",
     license="MIT",
     packages=find_packages(exclude=["tests", "tests.*"]),
