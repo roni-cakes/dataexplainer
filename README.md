@@ -7,18 +7,16 @@ Tables and charts are hard to read for people who do not code. pandalogue looks 
 
 ## What it does
 
-| Features |
-| --- |
-| Number columns: average, middle value (median), lowest, highest (`NumberDescriber`) |
-| Small numbers shown properly (`0.0002`, not `0`) and infinite values left out with a note |
-| Choice columns: most common answer and each share (`CategoryDescriber`) |
-| Empty cells, including blank text: how many and what percent (`MissingDescriber`) |
-| Date columns: where they start, end, and how many days (`DateDescriber`) |
-| How two number columns move together, never "causes" (`RelationshipDescriber`) |
-| Whole-table summary in one call (`DataStory` and `Story`) |
-| `DataStory` skips ID-like columns, reads numbers saved as text, warns about mixed columns |
-| `DataStory(max_sentences=8)` keeps only the most useful sentences |
-| **Optional** rules: you say what counts as good or bad (`RuleDescriber`) |
+1. Number columns: average, middle value (median), lowest, highest (`NumberDescriber`)
+2. Small numbers shown properly (`0.0002`, not `0`) and infinite values left out with a note
+3. Choice columns: most common answer and each share (`CategoryDescriber`)
+4. Empty cells, including blank text: how many and what percent (`MissingDescriber`)
+5. Date columns: where they start, end, and how many days (`DateDescriber`)
+6. How two number columns move together, never "causes" (`RelationshipDescriber`)
+7. Whole-table summary in one call (`DataStory` and `Story`)
+8. `DataStory` skips ID-like columns, reads numbers saved as text, warns about mixed columns
+9. `DataStory(max_sentences=8)` keeps only the most useful sentences
+10. **Optional** rules: you say what counts as good or bad (`RuleDescriber`)
 
 ## Installation
 
