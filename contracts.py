@@ -1,5 +1,3 @@
-# Contract for the data-description library (package: pandalogue, formerly named dataexplainer).
-# Contributors: Marc Ahron C. Alfar (leader), Mark Jay Macaya, Maria Taboclaon, Mc Lloyd Murillo
 """Contract for the library: every class, property and method it must have.
 
 This file is a reference, not part of the installed package. Nothing in the
