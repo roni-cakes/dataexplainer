@@ -4,7 +4,6 @@ A Python library that turns a table of data into a short summary in plain Englis
 
 Tables and charts are hard to read for people who do not code. pandalogue looks at a column and writes simple sentences about it, so programmers can explain their data and everyone else can understand it.
 
-> **Status: version 0.1.0.** All features below are ready. See `docs/report2_notes.md` for what changed after the first version and why.
 
 ## What it does
 
