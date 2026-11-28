@@ -1,78 +1,104 @@
-"""Describer for category, text, and boolean columns."""
+"""Describe categorical, text, and Boolean columns in plain English.
 
-from collections import Counter
+This module provides CategoryDescriber, which summarizes non-numerical
+columns in a pandas DataFrame by reporting the most frequent value(s)
+and the percentage breakdown of the top categories.
+
+Empty cells and blank strings are excluded before summarizing.
+"""
+
+from __future__ import annotations
+
 import pandas as pd
 from pandas.api.types import is_bool_dtype, is_numeric_dtype
 
-from base import BaseDescriber
-from category import ICategoryDescriber  # or `from interfaces import ICategoryDescriber` if kept in one file
-from utils import empty_mask, format_number, format_percent
+from .base import BaseDescriber
+from .utils import drop_empty, format_percent, join_with_and
 
 
-class CategoryDescriber(BaseDescriber, ICategoryDescriber):
-    """Describes text, category, and True/False columns (not numbers)."""
+class CategoryDescriber(BaseDescriber):
+    """Describe a column of categorical, text, or Boolean values.
 
-    MAX_SHOWN = 5
+    CategoryDescriber inherits from BaseDescriber. It identifies the
+    most common value(s) and summarizes how answers are distributed across
+    categories. If every value is unique, it reports that all answers
+    differ instead.
 
-    def describe(self, df: pd.DataFrame) -> list:
-        if self.column not in df.columns:
-            raise KeyError(f"Column {self.column!r} is not in the table.")
+    Empty cells (including missing values and blank strings) are ignored
+    by this describer.
 
-        series = df[self.column]
+    Attributes:
+        column (str): The name of the column being described. Read only.
+        MAX_SHOWN (int): Maximum number of values listed in a single
+            sentence before remaining values are summarized as
+            ``"and N more"``.
 
-        # True/False is allowed; other numeric types (int/float/etc.) are not.
-        if is_numeric_dtype(series.dtype) and not is_bool_dtype(series.dtype):
-            raise TypeError(f"Column {self.column!r} holds numbers, not categories.")
+    Example:
+        >>> import pandas as pd
+        >>> from pandalogue.category import CategoryDescriber
+        >>> df = pd.DataFrame({"pet": ["cat", "dog", "cat", "bird"]})
+        >>> CategoryDescriber("pet").describe(df)
+        ['The most common pet is cat, with 2 of 4 answers (50%).', 'Here is how the answers split: cat 50%, bird 25% and dog 25%.']
+    """
 
-        not_empty = ~empty_mask(series)
-        values = [str(v) for v in series[not_empty]]
+    MAX_SHOWN: int = 5
+    """int: Maximum number of distinct answers displayed per sentence."""
+
+    def describe(self, df: pd.DataFrame) -> list[str]:
+        """Generate plain-English sentences describing the categorical column.
+
+        Args:
+            df (pandas.DataFrame): DataFrame containing the column.
+
+        Returns:
+            list[str]: One or two descriptive sentences summarizing the
+                column's values.
+
+        Raises:
+            KeyError: If the requested column is missing from the DataFrame.
+            TypeError: If the column contains numerical (non-Boolean) data.
+        """
+        self._check_column(df)
+        values = df[self._column]
+        name = self._column
+        if is_numeric_dtype(values) and not is_bool_dtype(values):
+            raise TypeError(
+                f"Column '{name}' holds numbers, not choices. "
+                "Use NumberDescriber instead."
+            )
+
+        values = drop_empty(values)
+        if values.empty:
+            return [f"The {name} column has no answers to describe."]
+
         total = len(values)
+        # Sort by frequency descending, then alphabetically ascending for ties.
+        groups = sorted(
+            values.value_counts().items(), key=lambda pair: (-pair[1], str(pair[0]))
+        )
 
-        if total == 0:
-            return [f"The {self.column} column has no answers to describe."]
+        if total == 1:
+            return [f"The only answer in {name} is {groups[0][0]}."]
+        if len(groups) == 1:
+            return [f"Every answer in {name} is {groups[0][0]}."]
 
-        counts = Counter(values)
-        # Sort by count descending, then alphabetically ascending for ties.
-        ordered = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+        top_count = groups[0][1]
+        if top_count == 1:
+            return [f"All {total} answers in {name} are different from each other."]
 
-        distinct_count = len(ordered)
-        if distinct_count == 1:
-            only_val, only_count = ordered[0]
-            if total == 1:
-                return [f"The only answer in {self.column} is {only_val}."]
-            return [f"Every answer in {self.column} is {only_val}."]
-
-        if distinct_count == total:
-            return [f"All {format_number(total)} answers in {self.column} are different from each other."]
-
-        top_count = ordered[0][1]
-        top_tied = [val for val, cnt in ordered if cnt == top_count]
-        pct_top = format_percent((top_count / total) * 100)
-        total_fmt = format_number(total)
-
-        if len(top_tied) >= 2:
-            x, y = top_tied[0], top_tied[1]
-            first = (
-                f"The most common {self.column} answers are {x} and {y}, "
-                f"each with {format_number(top_count)} of {total_fmt} answers ({pct_top})."
-            )
+        winners = [label for label, count in groups if count == top_count]
+        share = f"{top_count} of {total} answers ({format_percent(top_count, total)})"
+        if len(winners) == 1:
+            first = f"The most common {name} is {winners[0]}, with {share}."
         else:
-            x = ordered[0][0]
-            first = (
-                f"The most common {self.column} is {x}, "
-                f"with {format_number(top_count)} of {total_fmt} answers ({pct_top})."
-            )
+            names = join_with_and(winners, limit=self.MAX_SHOWN)
+            first = f"The most common {name} answers are {names}, each with {share}."
 
-        shown = ordered[: self.MAX_SHOWN]
-        remaining = distinct_count - len(shown)
-        parts = [f"{val} {format_percent((cnt / total) * 100)}" for val, cnt in shown]
-
-        if remaining > 0:
-            split_text = ", ".join(parts) + f" and {format_number(remaining)} more"
-        elif len(parts) > 1:
-            split_text = ", ".join(parts[:-1]) + f" and {parts[-1]}"
-        else:
-            split_text = parts[0]
-
-        second = f"Here is how the answers split: {split_text}."
+        parts = [
+            f"{label} {format_percent(count, total)}" for label, count in groups
+        ]
+        second = (
+            "Here is how the answers split: "
+            f"{join_with_and(parts, limit=self.MAX_SHOWN)}."
+        )
         return [first, second]
